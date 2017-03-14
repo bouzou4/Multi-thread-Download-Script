@@ -87,11 +87,14 @@ def main():
     ifile = open(fn, 'r')
 
     for line in ifile:
+        line = line.rstrip(" \n")
         if title:
-            lNames.append(line.rstrip(" \n"))
+            lNames.append(line)
             title = False
         else:
-            urls.append(line.rstrip(" \n"))
+            if (line == ''):
+                raise ValueError('tried to read empty URL')
+            urls.append(line)
             title = True
 
     download(urls, dir, lNames, thrdCount)
