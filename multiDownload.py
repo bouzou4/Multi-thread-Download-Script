@@ -67,7 +67,10 @@ def download(urls, destfolder, names, numthreads):
     namQ = 0
     assert (len(urls) == len(names))
     for url in urls:
-        obj = [url, names[namQ]]
+        if (names[namQ] != ''):
+            obj = [url, names[namQ]]
+        else:
+            obj = [url, "file{}".format(namQ)]
         queue.put(obj)
         namQ += 1
     for i in range(numthreads):
