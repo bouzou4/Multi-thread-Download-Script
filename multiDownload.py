@@ -35,8 +35,7 @@ class DownloadThread(threading.Thread):
             self.queue.task_done()
 
     def downloadFile(self, url, fname):
-        #here's where file extension is resolved
-        dest = os.path.join(self.destfolder, (fname + ".mp4"))
+        dest = os.path.join(self.destfolder, fname)
         print "[thread: {}] Downloading {} from ({})".format(self.ident, fname, url)
         downloadBar(url, dest, fname)
         print
@@ -58,7 +57,7 @@ def downloadBar(url, path, fname):
 
 def download(urls, destfolder, names, numthreads):
     """
-    creates download threads and queue of downloads
+    creates download threads and queue of downloads as well as adds file extensions to parsed file names
     :param urls: all links parsed from links file
     :param d: second object amount
 
@@ -71,6 +70,13 @@ def download(urls, destfolder, names, numthreads):
             obj = [url, names[namQ]]
         else:
             obj = [url, "{}_{}".format(url.split("/")[-1].split(".")[0], namQ)]
+        try:
+            tempExt = "." + url.split("/")[-1].split(".")[1].split("?")[0]
+        except:
+            tempExt = ""
+        hasExt = len(names[namQ].split(".")) > 1
+        if (not hasExt):
+            obj[1] += tempExt
         queue.put(obj)
         namQ += 1
     for i in range(numthreads):
