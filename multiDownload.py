@@ -12,7 +12,6 @@ text file format should be title then url and alternating for each file
 
 '''
 
-import ssl
 import threading
 from Queue import Queue
 import os
